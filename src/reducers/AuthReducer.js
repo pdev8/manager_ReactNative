@@ -3,6 +3,7 @@ import { EMAIL_CHANGED, PASSWORD_CHANGED } from '../actions/types';
 const INITIAL_STATE = { email: '' };
 
 export default (state = INITIAL_STATE, action) => {
+	console.log(action);
 	switch (action.type) {
         // 5. Reducer calculates new app state
         case EMAIL_CHANGED:

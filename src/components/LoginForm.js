@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Card, CardSection, Input, Button } from './common';
-import { emailChanged, passwordChanged } from '../actions';
+import { emailChanged, passwordChanged, loginUser } from '../actions';
 
 // Using Redux to handle state at the application state level, so that 
 // component does not hold logic for state
@@ -18,7 +18,13 @@ class LoginForm extends Component {
     
     onPasswordChange(text) {
         this.props.passwordChanged(text);
-    }
+	}
+	
+	onButtonPress() {
+		const { email, password } = this.props;
+
+		this.props.loginUser({ email, password });
+	}
 
 	render() {
 		return (
@@ -40,12 +46,12 @@ class LoginForm extends Component {
 						label="Password"
 						placeholder="password"
                         onChangeText={this.onPasswordChange.bind(this)}
-                        value={this.props.email}
+                        value={this.props.password}
 					/>
 				</CardSection>
 
 				<CardSection>
-					<Button>Login</Button>
+					<Button onPress={this.onButtonPress.bind(this)}>Login</Button>
 				</CardSection>
 			</Card>
 		);
@@ -55,13 +61,11 @@ class LoginForm extends Component {
 // 6. State sent to all components (it is called w/ the global application state 
 // as the parameter)
 const mapStateToProps = (state) => {
-	const { newEmail, newPassword } = state.auth;
-
 	return {
-        email: newEmail,
-        password: newPassword
+        email: state.auth.email,
+        password: state.auth.password
 	};
 };
 
 // Import the Action Creator and hook it up to the component w/ the connect helper
-export default connect(mapStateToProps, { emailChanged, passwordChanged })(LoginForm);
+export default connect(mapStateToProps, { emailChanged, passwordChanged, loginUser })(LoginForm);
