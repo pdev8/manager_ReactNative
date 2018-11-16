@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
+import { View, Text } from 'react-native';
 import { connect } from 'react-redux';
-import { Card, CardSection, Input, Button } from './common';
+import { Card, CardSection, Input, Button, Spinner } from './common';
 import { emailChanged, passwordChanged, loginUser } from '../actions';
 
 // Using Redux to handle state at the application state level, so that 
@@ -24,6 +25,29 @@ class LoginForm extends Component {
 		const { email, password } = this.props;
 
 		this.props.loginUser({ email, password });
+	}
+
+	renderError() {
+		console.log(this.props.error);
+		if (this.props.error) {
+			return (
+				<View style={{ backgroundColor: 'white' }}>
+					<Text style={styles.errorTextStyle}>
+						{this.props.error}
+					</Text>
+				</View>
+			);
+		}
+	}
+
+	renderButton() {
+		if (this.props.loading) {
+			return <Spinner size='large' />;
+		}
+
+		return (
+			<Button onPress={this.onButtonPress.bind(this)}>Login</Button>
+		);
 	}
 
 	render() {
@@ -50,8 +74,10 @@ class LoginForm extends Component {
 					/>
 				</CardSection>
 
+				{this.renderError()}
+
 				<CardSection>
-					<Button onPress={this.onButtonPress.bind(this)}>Login</Button>
+					{this.renderButton()}
 				</CardSection>
 			</Card>
 		);
@@ -63,8 +89,18 @@ class LoginForm extends Component {
 const mapStateToProps = (state) => {
 	return {
         email: state.auth.email,
-        password: state.auth.password
+		password: state.auth.password,
+		error: state.auth.error,
+		loading: state.auth.loading
 	};
+};
+
+const styles = {
+	errorTextStyle: {
+		fontSize: 20,
+		alignSelf: 'center',
+		color: 'red'
+	}
 };
 
 // Import the Action Creator and hook it up to the component w/ the connect helper

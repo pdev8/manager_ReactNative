@@ -10,7 +10,7 @@ const CardSection = (props) => (
 const styles = {
     constainerStyle: {
         borderBottomWidth: 1,
-        padding: 5,
+        paddingTop: 30,
         backgroundColor: '#fff',
         justifyContent: 'flex-start',
         flexDirection: 'row',
